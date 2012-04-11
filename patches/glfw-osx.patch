@@ -1,0 +1,27 @@
+Only in ./examples: listmodes.dSYM
+Only in ./examples: mtbench.dSYM
+Only in ./examples: mthello.dSYM
+Only in .: glfw-osx.patch
+Only in ./lib/cocoa: .cocoa_init.m.swp
+diff -cr ./lib/cocoa/cocoa_init.m ../../downloads/glfw-2.7.4/lib/cocoa/cocoa_init.m
+*** ./lib/cocoa/cocoa_init.m	2012-04-08 12:05:41.000000000 -0400
+--- ../../downloads/glfw-2.7.4/lib/cocoa/cocoa_init.m	2012-03-20 10:36:37.000000000 -0400
+***************
+*** 29,39 ****
+  
+  #include "internal.h"
+  
+- 
+- #ifdef __APPLE__ & __MACH__
+-     #define MAXPATHLEN PATH_MAX
+- #endif 
+- 
+  @interface GLFWThread : NSThread
+  @end
+  
+--- 29,34 ----
+Only in ./lib/cocoa: cocoa_init.m~
+Only in ./tests: defaults.dSYM
+Only in ./tests: events.dSYM
+Only in ./tests: joysticks.dSYM
+Only in ./tests: version.dSYM

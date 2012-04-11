@@ -1,0 +1,29 @@
+DEP = ../../dependencies
+
+CC = g++
+
+#INCLUDES = -I/Users/Uriah/articulated/dependencies
+INCLUDES = -I../../dependencies
+LFLAGS = -framework Cocoa -framework OpenGL
+CFLAGS = 
+
+OBJS = eigenfirst.o
+
+TARGET = eigenfirst
+
+all: eigenfirst
+
+eigenfirst: eigenfirst.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) $(LFLAGS) -o $@ $(OBJS) 
+
+.c.o:
+	$(CC) $(CFLAGS) $(INCLUDES) -c $<
+
+#$(TARGET): $(OBJS)
+#	$(CC) $(INCLUDES) $(LFLAGS) -o $@ $(OBJS) $(LIBS)
+
+#.c.o:
+#	$(CC) $(INCLUDES) -c $<
+
+clean:
+	rm -f $(OBJS) $(TARGET)

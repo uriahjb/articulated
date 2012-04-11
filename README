@@ -1,0 +1,14 @@
+Articulated:
+	An articulated rigid body simulator
+	... well at least it should be one in a bit
+
+- Uriah
+
+Dependencies:
+	- Eigen
+	- glfw-2.7.4
+	- vcollide-2.01
+
+
+
+

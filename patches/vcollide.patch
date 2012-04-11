@@ -1,0 +1,148 @@
+Only in .: .Makefile.swp
+Only in .: .README.txt.swp
+diff -cr ./Makefile ../../downloads/vcollide-2.01/Makefile
+*** ./Makefile	2012-04-08 11:38:02.000000000 -0400
+--- ../../downloads/vcollide-2.01/Makefile	1998-11-18 22:14:10.000000000 -0500
+***************
+*** 6,13 ****
+  ############################################################################
+  
+  #Choose the C++ compiler you want
+! #CC = CC
+! CC = g++
+  
+  # If you want the demos to be compiled with a graphical display of 
+  # the simulation, then uncomment the following lines and provide
+--- 6,12 ----
+  ############################################################################
+  
+  #Choose the C++ compiler you want
+! CC = CC
+  
+  # If you want the demos to be compiled with a graphical display of 
+  # the simulation, then uncomment the following lines and provide
+***************
+*** 17,24 ****
+  #GRAPHICS_INCLUDES = -I/afs/unc/project/walk/include
+  #GRAPHICS_LDFLAGS  = -L/afs/unc/project/walk/lib/`hw_os`
+  #GRAPHICS_LIBS     = -lglut -lGLU -lGL -lX11 -lXmu
+! GRAPHICS_CFLAGS = -DOGL_GRAPHICS
+! GRAPHICS_LIBS = -framework OpenGL -framework GLUT 
+  
+  all : 
+  	cd RAPID; \
+--- 16,22 ----
+  #GRAPHICS_INCLUDES = -I/afs/unc/project/walk/include
+  #GRAPHICS_LDFLAGS  = -L/afs/unc/project/walk/lib/`hw_os`
+  #GRAPHICS_LIBS     = -lglut -lGLU -lGL -lX11 -lXmu
+! 
+  
+  all : 
+  	cd RAPID; \
+Only in .: Makefile~
+diff -cr ./RAPID/Makefile ../../downloads/vcollide-2.01/RAPID/Makefile
+*** ./RAPID/Makefile	2012-04-07 22:45:18.000000000 -0400
+--- ../../downloads/vcollide-2.01/RAPID/Makefile	1998-10-23 20:29:02.000000000 -0400
+***************
+*** 17,23 ****
+  
+  libRAPID.a: $(OBJECTS)
+  	/bin/rm -f libRAPID.a
+! 	ar ruvs libRAPID.a $(OBJECTS)
+  
+  .C.o:
+  	$(CC) ${CFLAGS} -c $<
+--- 17,23 ----
+  
+  libRAPID.a: $(OBJECTS)
+  	/bin/rm -f libRAPID.a
+! 	ar ruv libRAPID.a $(OBJECTS)
+  
+  .C.o:
+  	$(CC) ${CFLAGS} -c $<
+***************
+*** 26,34 ****
+  	$(CC) ${CFLAGS} -c $<
+  
+  test:
+! 
+! 	$(CC) -o sample_client sample_client.C -L. -lRAPID -lm 
+! 	#$(CC) -o sample_client sample_client.C /Users/Uriah/articulated/dependencies/vcollide-2.01/RAPID/libRAPID.a -lm 
+  
+  clean:
+  	rm -f $(CLEAN)
+--- 26,32 ----
+  	$(CC) ${CFLAGS} -c $<
+  
+  test:
+! 	$(CC) -o sample_client sample_client.C -L. -lRAPID -lm
+  
+  clean:
+  	rm -f $(CLEAN)
+Only in ../../downloads/vcollide-2.01/RAPID: RAPID.H
+Only in ./RAPID: RAPID.h
+diff -cr ./RAPID/RAPID_private.H ../../downloads/vcollide-2.01/RAPID/RAPID_private.H
+*** ./RAPID/RAPID_private.H	2012-04-07 21:58:45.000000000 -0400
+--- ../../downloads/vcollide-2.01/RAPID/RAPID_private.H	1997-07-03 12:54:10.000000000 -0400
+***************
+*** 17,23 ****
+    
+    int build_hierarchy();
+    
+!   friend int RAPID_Collide(double R1[3][3], double T1[3], 
+  		       double s1, RAPID_model *RAPID_model1,
+  		       double R2[3][3], double T2[3], 
+  		       double s2, RAPID_model *RAPID_model2,
+--- 17,23 ----
+    
+    int build_hierarchy();
+    
+!   friend RAPID_Collide(double R1[3][3], double T1[3], 
+  		       double s1, RAPID_model *RAPID_model1,
+  		       double R2[3][3], double T2[3], 
+  		       double s2, RAPID_model *RAPID_model2,
+Only in ./RAPID: a.out
+Only in ./RAPID: tags
+diff -cr ./demos/bunny/polyObject.H ../../downloads/vcollide-2.01/demos/bunny/polyObject.H
+*** ./demos/bunny/polyObject.H	2012-04-07 22:55:00.000000000 -0400
+--- ../../downloads/vcollide-2.01/demos/bunny/polyObject.H	1997-06-12 04:10:48.000000000 -0400
+***************
+*** 78,84 ****
+    polyObject(Polytope *p);
+    ~polyObject();
+  
+!   void UpdateOneStep(double ogl_trans[16]); 
+                       //updates position and orientation by one frame.
+                       //also checks for collision with the walls of the
+                       //cube and provides a simple collision response.
+--- 78,84 ----
+    polyObject(Polytope *p);
+    ~polyObject();
+  
+!   void polyObject::UpdateOneStep(double ogl_trans[16]); 
+                       //updates position and orientation by one frame.
+                       //also checks for collision with the walls of the
+                       //cube and provides a simple collision response.
+Only in ./demos/bunny: polyObject.H~
+diff -cr ./demos/rings/vector.H ../../downloads/vcollide-2.01/demos/rings/vector.H
+*** ./demos/rings/vector.H	2012-04-07 22:53:06.000000000 -0400
+--- ../../downloads/vcollide-2.01/demos/rings/vector.H	1997-06-12 02:49:14.000000000 -0400
+***************
+*** 84,90 ****
+        v[2] = p.v[2];
+      }
+  
+!   Vector& operator=(const Vector &rhs)
+      {
+        v[0] = rhs.v[0];
+        v[1] = rhs.v[1];
+--- 84,90 ----
+        v[2] = p.v[2];
+      }
+  
+!   Vector& Vector::operator=(const Vector &rhs)
+      {
+        v[0] = rhs.v[0];
+        v[1] = rhs.v[1];
+Only in ./demos/rings: vector.H~
+Only in .: vcollide.patch
