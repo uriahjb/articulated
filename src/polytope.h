@@ -54,94 +54,34 @@
 
 \************************************************************************/
 
+#ifndef POLYTOPE_H
+#define POLYTOPE_H
+
 #include <iostream.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "vector.h"
+#include "triangle.h"
 
+class Polytope
+{
+
+public:
+ 
+  int num_vertices;  //number of vertices.
+  int num_tris;      //number of triangles.
+
+  Vector *vertex;    //points to an array of vertices.
+  Triangle *tris;    //points to an array of triangles.
+  
+  Polytope(char *filename); //reads in the geometry from an input file.
+  ~Polytope();
 //#ifdef OGL_GRAPHICS
-//#include <GL/glut.h>
+  void Display(double ogl_trans[16]); //displays polytope using OpenGL.
 //#endif
-
-#include <GL/glfw.h>
-
-#include "polytope.h"
-
-Polytope::Polytope(char *filename)
-{
-  
-  FILE *fp;
-  
-  if ( (fp = fopen(filename, "r")) == NULL )
-    {
-      fprintf(stderr, "Polytope::Polytope => Error opening %s\n", filename);
-      exit(1);
-    }
-  
-  
-  char dummy_str[30];
-  
-  fscanf(fp, "%s", dummy_str);
-  fscanf(fp, "%s", dummy_str);
-  
-  fscanf(fp, "%d", &num_vertices);
-  fscanf(fp, "%d", &num_tris);
-  
-  vertex = new Vector[num_vertices];
-  tris = new Triangle[num_tris];
-
-  // Want to be able to scale things 
-  double scl = 100;
-
-  int i, dummy_int;
-  for (i=0; i<num_vertices; i++){
-    fscanf(fp, "%d %lf %lf %lf", &dummy_int, &((vertex[i])[0]), &((vertex[i])[1]), &((vertex[i])[2]) );
-    vertex[i][0] = scl*vertex[i][0];
-    vertex[i][1] = scl*vertex[i][1];
-    vertex[i][2] = scl*vertex[i][2];
-  }
-  for (i=0; i<num_tris; i++)
-    fscanf(fp, "%s %ld %ld %ld", dummy_str, &((tris[i])[0]), &((tris[i])[1]), &((tris[i])[2]) );
-  
-  fclose(fp);
-  
-}
+};
 
 
-Polytope::~Polytope()
-{
-
-  delete[] vertex;
-  delete[] tris;
-}
 
 
-//#ifdef OGL_GRAPHICS
-void Polytope::Display(double ogl_trans[16])
-{
-  glPushMatrix();
-  //glLoadMatrixd(ogl_trans);
-  glMultMatrixd(ogl_trans);
-  glBegin(GL_TRIANGLES);
-  
-  int i;
-  for (i=0; i<num_tris; i++)
-    {
-      // This is a cross product
-      Vector normal =  (vertex[tris[i].p[1]] - vertex[tris[i].p[0]])*
-	               (vertex[tris[i].p[2]] - vertex[tris[i].p[0]]);
 
-      normal.normalize();
-      
-      glNormal3dv( normal.v );
-      glVertex3dv( vertex[tris[i].p[0]].v );
-      glVertex3dv( vertex[tris[i].p[1]].v );
-      glVertex3dv( vertex[tris[i].p[2]].v );
-      
-    }
-  
-  glEnd();
-  
-  glPopMatrix();
-  
-}
-//#endif
+
+#endif

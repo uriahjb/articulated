@@ -53,95 +53,140 @@
   EMail:    geom@cs.unc.edu
 
 \************************************************************************/
+#ifndef VECTOR_H
+#define VECTOR_H
 
-#include <iostream.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <math.h>
 
-//#ifdef OGL_GRAPHICS
-//#include <GL/glut.h>
-//#endif
+#define EPS 0.0001
 
-#include <GL/glfw.h>
+class Vector{
+public:
+  double v[3];
 
-#include "polytope.h"
-
-Polytope::Polytope(char *filename)
-{
-  
-  FILE *fp;
-  
-  if ( (fp = fopen(filename, "r")) == NULL )
+  Vector()
     {
-      fprintf(stderr, "Polytope::Polytope => Error opening %s\n", filename);
-      exit(1);
     }
   
   
-  char dummy_str[30];
+  Vector(double v0, double v1, double v2)
+    {
+      v[0] = v0;
+      v[1] = v1;
+      v[2] = v2;
+    }
   
-  fscanf(fp, "%s", dummy_str);
-  fscanf(fp, "%s", dummy_str);
   
-  fscanf(fp, "%d", &num_vertices);
-  fscanf(fp, "%d", &num_tris);
-  
-  vertex = new Vector[num_vertices];
-  tris = new Triangle[num_tris];
+  Vector(const Vector& p)
+    {
+      v[0] = p.v[0];
+      v[1] = p.v[1];
+      v[2] = p.v[2];
+    }
 
-  // Want to be able to scale things 
-  double scl = 100;
+  Vector& operator=(const Vector& rhs)
+    {
+      v[0] = rhs.v[0];
+      v[1] = rhs.v[1];
+      v[2] = rhs.v[2];
+      
+      return *this;
+    }
 
-  int i, dummy_int;
-  for (i=0; i<num_vertices; i++){
-    fscanf(fp, "%d %lf %lf %lf", &dummy_int, &((vertex[i])[0]), &((vertex[i])[1]), &((vertex[i])[2]) );
-    vertex[i][0] = scl*vertex[i][0];
-    vertex[i][1] = scl*vertex[i][1];
-    vertex[i][2] = scl*vertex[i][2];
+  double& operator[](int i)
+    {
+      return v[i];
+    }
+
+  Vector operator+(const Vector& b)
+    {
+      Vector sum;
+
+      sum[0] = v[0]+b.v[0];
+      sum[1] = v[1]+b.v[1];
+      sum[2] = v[2]+b.v[2];
+
+      return sum;
+    }
+
+  Vector operator-(const Vector& b)
+    {
+      Vector diff;
+
+      diff[0] = v[0]-b.v[0];
+      diff[1] = v[1]-b.v[1];
+      diff[2] = v[2]-b.v[2];
+
+      return diff;
+
+    }
+  
+
+  Vector operator*(double term)
+  {
+    Vector result;
+    
+    result[0] = v[0] * term;
+    result[1] = v[1] * term;
+    result[2] = v[2] * term;
+    
+    return result;
+    
   }
-  for (i=0; i<num_tris; i++)
-    fscanf(fp, "%s %ld %ld %ld", dummy_str, &((tris[i])[0]), &((tris[i])[1]), &((tris[i])[2]) );
   
-  fclose(fp);
-  
-}
 
-
-Polytope::~Polytope()
-{
-
-  delete[] vertex;
-  delete[] tris;
-}
-
-
-//#ifdef OGL_GRAPHICS
-void Polytope::Display(double ogl_trans[16])
-{
-  glPushMatrix();
-  //glLoadMatrixd(ogl_trans);
-  glMultMatrixd(ogl_trans);
-  glBegin(GL_TRIANGLES);
-  
-  int i;
-  for (i=0; i<num_tris; i++)
+  Vector operator/(double denom)
     {
-      // This is a cross product
-      Vector normal =  (vertex[tris[i].p[1]] - vertex[tris[i].p[0]])*
-	               (vertex[tris[i].p[2]] - vertex[tris[i].p[0]]);
+      Vector result;
 
-      normal.normalize();
+      result[0] = v[0] / denom;
+      result[1] = v[1] / denom;
+      result[2] = v[2] / denom;
+
+      return result;
+
+    }
+
+  
+  Vector operator*(const Vector& b) /* cross product */
+    {
+      Vector result;
+    
+      result[0] = v[1]*b.v[2] - b.v[1]*v[2];
+      result[1] = b.v[0]*v[2] - v[0]*b.v[2];
+      result[2] = v[0]*b.v[1] - b.v[0]*v[1];
+    
+      return result;
+
+    }
+
+  double operator/(const Vector& b) /* dot product */
+    {
+      double result;
+
+      result = v[0]*b.v[0] + v[1]*b.v[1] + v[2]*b.v[2];
+      return result;
+    }
+
+  void normalize(void)
+    {
       
-      glNormal3dv( normal.v );
-      glVertex3dv( vertex[tris[i].p[0]].v );
-      glVertex3dv( vertex[tris[i].p[1]].v );
-      glVertex3dv( vertex[tris[i].p[2]].v );
+      double length = sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+      
+      if (length > EPS)
+	{
+	  v[0] /= length;
+	  v[1] /= length;
+	  v[2] /= length;
+	}
       
     }
+
+  double length()
+    {
+      return sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+    }
   
-  glEnd();
-  
-  glPopMatrix();
-  
-}
-//#endif
+};
+
+#endif

@@ -2,7 +2,7 @@
 # - Uriah
 #
 
-DEP = ../../dependencies
+DEP = ../dependencies
 GLFW_TOP = $(DEP)/glfw-2.7.4
 LIBGLFW = $(GLFW_TOP)/lib/cocoa/libglfw.a
 VC_TOP = $(DEP)/vcollide-2.01
@@ -15,14 +15,15 @@ INCLUDES = -I$(DEP) -I$(GLFW_TOP)/include -I$(VC_TOP)/include
 
 
 # Linker settings
-LIBS = $(LIBGLFW) -lVCollide -lRAPID -lm  
+LIBS = $(LIBGLFW) -lVCollide -lRAPID -lm -lyaml-cpp
 LFLAGS = -L$(VC_TOP)/lib -L$(VC_TOP)/RAPID $(LIBS) -framework Cocoa -framework OpenGL
 
 
-OBJS = icosphere.o gpuhelper.o camera.o polytope.o polyObject.o graphics.o main.o
-TARGET = polycam
+OBJS = gpuhelper.o Camera.o RigidBody.o World.o WorldLoader.o articulated.o
 
-all:	polycam
+TARGET = articulated 
+
+all:	articulated
 
 
 $(TARGET): $(OBJS)

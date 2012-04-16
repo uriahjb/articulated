@@ -4,7 +4,7 @@ CC = g++
 
 #INCLUDES = -I/Users/Uriah/articulated/dependencies
 INCLUDES = -I../../dependencies
-LFLAGS = -framework Cocoa -framework OpenGL
+LFLAGS = -lyaml-cpp -framework Cocoa -framework OpenGL
 CFLAGS = 
 
 OBJS = eigenfirst.o

@@ -13,10 +13,10 @@ TARGET = eigenfirst
 
 all: eigenfirst
 
-eigenfirst: eigenfirst.cpp
+eigenfirst: eigenfirst.o
 	$(CC) $(CFLAGS) $(INCLUDES) $(LFLAGS) -o $@ $(OBJS) 
 
-.c.o:
+.cpp.o:
 	$(CC) $(CFLAGS) $(INCLUDES) -c $<
 
 #$(TARGET): $(OBJS)

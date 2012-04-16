@@ -15,7 +15,7 @@ INCLUDES = -I$(DEP) -I$(GLFW_TOP)/include -I$(VC_TOP)/include
 
 
 # Linker settings
-LIBS = $(LIBGLFW) -lVCollide -lRAPID -lm  
+LIBS = $(LIBGLFW) -lVCollide -lRAPID -lm -lyaml-cpp 
 LFLAGS = -L$(VC_TOP)/lib -L$(VC_TOP)/RAPID $(LIBS) -framework Cocoa -framework OpenGL
 
 
