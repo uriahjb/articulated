@@ -1,0 +1,48 @@
+
+
+x_wp = pbody.state(1:3);
+q_wp = pbody.state(4:7);
+v_wp = pbody.dstate(1:3);
+omega_wp = pbody.dstate(4:6);
+m_p = pbody.mass;    
+x_pj = pbody.jx;
+q_pj = pbody.jq;
+xtarget = pbody.xtarget;
+p_inertia = pbody.inertia;
+
+x_wc = cbody.state(1:3);
+q_wc = cbody.state(4:7);
+v_wc = cbody.dstate(1:3);
+omega_wc = cbody.dstate(4:6);
+m_c = cbody.mass;    
+x_cj = cbody.jx;    
+c_inertia = cbody.inertia;
+
+
+j_xp = x_wp + quatrotate( q_wp ...
+                        , x_pj + quatrotate( q_pj, xtarget ) ...                                   
+                        ); 
+ 
+j_xc = x_wc + quatrotate( q_wc ...
+                        , x_cj ...                                   
+                        );
+
+jA1 = (1/m_p + 1/m_c).*eye(3) ...
+      + skew(j_xp)'*inv(p_inertia)*skew(j_xp) ...
+      + skew(j_xc)'*inv(c_inertia)*skew(j_xc);
+
+jtA1 = skew(j_xp)'*inv(p_inertia) + skew(j_xc)'*inv(c_inertia);
+
+jA2 = inv(p_inertia)*skew(j_xp) + inv(c_inertia)*skew(j_xc);
+
+jtA2 = inv(p_inertia) + inv(c_inertia);
+
+urel = [1 1 1];
+unew = urel;
+
+wrel = [1 1 1];
+wnew = wrel;
+wnew = [0 1 1];
+
+A = [jA1 jtA1; jA2 jtA2];
+[A\[unew-urel wnew-wrel]'

@@ -1,0 +1,17 @@
+% Descrete derivative of quaternion multiplied with vector ... this stuff is 
+% kinda a pain
+function val = dq_hat_r( omega, r, inertia, dt )
+
+    theta = norm(omega)/2
+    w = omega/norm(omega)
+    
+    thetadot = (dt/2)*w*inv(inertia)*r'
+    omegadot = (dt/2.*theta)*(eye(3) - w'*w)*inv(inertia)*r'
+    
+    val = 
+   
+    
+    
+    val = [];
+end
+    

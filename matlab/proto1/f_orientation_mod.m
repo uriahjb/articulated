@@ -1,0 +1,39 @@
+function ftj = f_orientation_mod( jt )
+
+    global pbody cbody dt
+
+    x_wp = pbody.state(1:3);
+    q_wp = pbody.state(4:7);
+    v_wp = pbody.dstate(1:3);
+    omega_wp = pbody.dstate(4:6);
+    m_p = pbody.mass;    
+    x_pj = pbody.jx;
+    q_pj = pbody.jq;
+    xtarget = pbody.xtarget;
+    qtarget = pbody.qtarget;
+    p_inertia = pbody.inertia;
+    
+    x_wc = cbody.state(1:3);
+    q_wc = cbody.state(4:7);
+    v_wc = cbody.dstate(1:3);
+    omega_wc = cbody.dstate(4:6);
+    m_c = cbody.mass;    
+    x_cj = cbody.jx;    
+    q_cj = cbody.jq;
+    c_inertia = cbody.inertia;
+                           
+    int_omega_p = omega_wp.*dt + dt.*(p_inertia\jt')';
+    q_phat = q_hat( int_omega_p );
+    
+    int_omega_c = omega_wc.*dt - dt.*(c_inertia\jt')';
+    q_chat = q_hat( int_omega_c );
+    
+    ftj = quatmultiply( q_phat, ...
+                        quatmultiply( q_wp, ...
+                                      quatmultiply( q_pj, ...
+                                                    quatmultiply( qtarget )))) ...
+        - quatmultiply( q_chat, ...
+                        quatmultiply( q_wc, ...
+                                      quatmultiply( q_cj )));
+    
+    

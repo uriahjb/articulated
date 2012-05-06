@@ -1,0 +1,4 @@
+% Queue up impul
+function body = queue_impulse( body, impulse, loc )
+    body.impulses = [body.impulses; impulse loc];
+end

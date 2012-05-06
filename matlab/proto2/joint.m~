@@ -1,0 +1,71 @@
+classdef joint < handle 
+    properties
+        pbody 
+        cbody        
+        xtarget        
+        qtarget
+        px
+        cx
+        pq
+        cq
+    end
+    methods 
+        function self = joint( pbody, cbody, px, cx, pq, cq )
+            self.pbody = pbody;
+            self.cbody = cbody;
+            self.px = px;
+            self.cx = cx;
+            self.pq = pq;
+            self.cq = cq;
+            self.xtarget = [0 0 0];
+            self.qtarget = [1 0 0 0];
+        end
+        function set_target( self, xtarget, qtarget )
+            self.xtarget = xtarget;
+            self.qtarget = qtarget;
+        end
+        function evolve( self, dt )
+            pbody = self.pbody;
+            cbody = self.cbody;
+            x_wp = pbody.state(1:3);
+            q_wp = pbody.state(4:7);
+            v_wp = pbody.dstate(1:3);
+            omega_wp = pbody.dstate(4:6);            
+            x_pj = self.px;
+            q_pj = self.pq;
+
+            x_wc = cbody.state(1:3);
+            q_wc = cbody.state(4:7);
+            v_wc = cbody.dstate(1:3);
+            omega_wc = cbody.dstate(4:6);            
+            x_cj = self.cx;
+            q_cj = self.cq;            
+            
+            q_hp = q_hat( omega_wp.*dt );    
+            q_wp1 = quatmultiply( q_hp, q_wp );
+
+            q_hc = q_hat( omega_wc.*dt );    
+            q_wc1 = quatmultiply( q_hc, q_wc );
+
+            x_wp1 = x_wp + v_wp.*dt;
+            x_wc1 = x_wc + v_wc.*dt;
+
+            xnew = quatrotate( quatinv(q_pj), ( quatrotate( quatinv(q_wp1), ( x_wc1 + quatrotate( q_wc1, x_cj ) - x_wp1 )) - x_pj ) );   
+            qnew = quatmultiply( quatinv(q_pj), quatmultiply( quatinv(q_wp1), quatmultiply( q_wc1, q_cj )));       
+            
+            self.apply_constraints( xnew, qnew )
+        end
+        
+        function apply_constraints( self, xnew, qnew )
+            self.xtarget = xnew;
+            self.qtarget = qnew;
+        end
+        
+        function apply_impulse( self )
+            
+        end
+        
+        function apply_
+                
+    end
+end
